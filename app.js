@@ -1,9 +1,12 @@
 const express = require("express");
+const path = require('path');
 const { db, sql } = require("./config/db");
 const { router } = require("./router/administrador/adminRouter");
 const { sucursal } = require("./router/sucursales/sucursalRouter");
 const { asesores } = require("./router/asesor/asesorRouter");
 const { moto } = require("./router/motos/motosRouter");
+
+
 const app = express();
 
 app.use(express.json());
@@ -44,6 +47,9 @@ sql.connect(db)
     .catch(err => {
         console.error("Error al conectar la base de datos", err);
     });
+
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // Configuracion del puerto
