@@ -3,6 +3,7 @@ const { db, sql } = require("./config/db");
 const { router } = require("./router/administrador/adminRouter");
 const { sucursal } = require("./router/sucursales/sucursalRouter");
 const { asesores } = require("./router/asesor/asesorRouter");
+const { moto } = require("./router/motos/motosRouter");
 const app = express();
 
 app.use(express.json());
@@ -28,6 +29,10 @@ app.use("/", sucursal);
 // Asesores
 
 app.use("/", asesores);
+
+// Motos
+
+app.use('/', moto);
 
 
 // Manejo de Errores en la conexion a la base de datos
