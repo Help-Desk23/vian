@@ -57,9 +57,41 @@ const addMoto = async (req, res) => {
     }
 };
 
+// Controlador PUT para actualizar datos de la moto
+
+
+// Controlador DELETE para eliminar moto
+
+const deleteMoto = async (req, res) => {
+    const { id_motos } = req.params;
+
+    try {
+        const pool = await sql.connect(db);
+
+        const result = await pool.request()
+            .input('id_motos', sql.Int, id_motos)
+            .query('SELECT * FROM motos WHERE id_motos = @id_motos');
+
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ error: 'Moto no encontrada' });
+        }
+
+        await pool.request()
+            .input('id_motos', sql.Int, id_motos)
+            .query('DELETE FROM motos WHERE id_motos = @id_motos');
+
+        res.status(200).json({ message: 'Moto eliminada exitosamente' });
+
+    } catch (err) {
+        console.error("Error al eliminar la moto:", err);
+        res.status(500).json({ error: 'Error al eliminar la moto' });
+    }
+};
+
 
 module.exports = {
     getMotos,
     addMoto,
+    deleteMoto,
     upload
 };
