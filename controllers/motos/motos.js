@@ -1,6 +1,22 @@
 const {db, sql} = require('../../config/db');
+const multer = require('multer');
+const path = require('path');
 
-// Contraolador GET para obtener las motos
+
+// Configuración de multer
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// Controlador GET para obtener las motos
 
 const getMotos = async(req, res) => {
     try{
@@ -17,7 +33,33 @@ const getMotos = async(req, res) => {
     }
 };
 
+// Controlador POST para agregar motos
+
+const addMoto = async (req, res) => {
+    const { modelo, precious, inicialbs } = req.body;
+    const img_motos = req.file ? req.file.path : null;
+
+    try {
+        const pool = await sql.connect(db);
+
+        const result = await pool.request()
+            .input('modelo', sql.VarChar, modelo)
+            .input('precious', sql.VarChar, precious)
+            .input('inicialbs', sql.VarChar, inicialbs)
+            .input('img_motos', sql.VarChar, img_motos)
+            .query('INSERT INTO motos (modelo, precious, inicialbs, img_motos) VALUES (@modelo, @precious, @inicialbs, @img_motos)');
+
+        res.status(201).json({ message: "Moto añadida exitosamente" });
+
+    } catch (err) {
+        console.error("Error al añadir la moto:", err);
+        res.status(500).json({ error: 'Error al añadir la moto' });
+    }
+};
+
 
 module.exports = {
-    getMotos
+    getMotos,
+    addMoto,
+    upload
 };
