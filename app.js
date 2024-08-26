@@ -6,6 +6,7 @@ const { sucursal } = require("./router/sucursales/sucursalRouter");
 const { asesores } = require("./router/asesor/asesorRouter");
 const { moto } = require("./router/motos/motosRouter");
 const { costo } = require("./router/costovarios/costoRouter");
+const { client } = require("./router/cliente/clienteRouter");
 
 
 const app = express();
@@ -41,6 +42,10 @@ app.use('/', moto);
 // Costo
 
 app.use('/', costo);
+
+// Cliente
+
+app.use('/', client);
 
 
 // Manejo de Errores en la conexion a la base de datos
