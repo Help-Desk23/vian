@@ -3,15 +3,19 @@ const { db, sql } = require("../../config/db");
 // Controlador GET para obtener cliente
 
 const getCliente = async(req, res) => {
+
     try{
         const pool = await sql.connect(db);
         const result = await pool.request().query('SELECT * FROM cliente');
 
         if(result.recordset.length === 0){
+            console.log("No se encontró ningún cliente");
             return res.status(400).json({ error: 'No se encontro cliente'});
+        } else {
+            return res.status(200).json(result.recordset);
         }
-    } catch(err) {
-        console.error("Erro al obtener clientes", err);
+    } catch(err){
+        console.error("Error al obtener clientes", err);
         res.status(500).json({error: "Error al obtener clientes"});
     }
 };
