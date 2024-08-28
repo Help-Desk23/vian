@@ -63,8 +63,6 @@ const loginAsesores = async (req, res) => {
 
         if (passwordResult.recordset.length > 0) {
             res.status(200).json({ message: "Inicio exitoso" });
-        } else {
-            res.status(401).json({ error: 'Contraseña incorrecta' });
         }
 
     } catch (err) {
