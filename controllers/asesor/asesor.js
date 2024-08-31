@@ -62,7 +62,8 @@ const loginAsesores = async (req, res) => {
             .query('SELECT * FROM asesores WHERE usuario = @usuario AND contraseña = @contraseña');
 
         if (passwordResult.recordset.length > 0) {
-            res.status(200).json({ message: "Inicio exitoso" });
+            const asesor = passwordResult.recordset[0];
+            res.status(200).json({ message: "Inicio exitoso", asesor });
         }
 
     } catch (err) {
