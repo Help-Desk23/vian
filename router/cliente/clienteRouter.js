@@ -12,9 +12,6 @@ client.get('/cliente', getCliente);
 client.post('/cliente', addCliente);
 
 
-
-
-
 module.exports = {
     client
 };

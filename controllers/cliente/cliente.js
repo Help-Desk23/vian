@@ -49,7 +49,6 @@ const addCliente = async(req, res) => {
 };
 
 
-
 module.exports = {
     getCliente,
     addCliente
