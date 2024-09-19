@@ -49,7 +49,54 @@ const addCliente = async(req, res) => {
 };
 
 
+// Controlador GET para mostrar Cliente Completos
+
+const getClientes = async (req, res) => {
+    try {
+        const pool = await sql.connect(db);
+        
+        const result = await pool.request()
+            .query(`
+                SELECT 
+                    c.id_cliente,
+                    c.nombre AS nombre_cliente,
+                    c.telefono,
+                    c.plazo,
+                    c.precious,
+                    c.inicialbs,
+                    c.fecha,
+                    c.cuota_mes,
+                    m.modelo AS modelo,
+                    a.nombre AS asesor,
+                    s.sucursal AS sucursal,
+                    m.img_motos AS img_moto
+                FROM 
+                    cliente c
+                JOIN 
+                    motos m ON c.id_motos = m.id_motos
+                JOIN 
+                    asesores a ON c.id_asesores = a.id_asesores
+                JOIN 
+                    sucursales s ON c.id_sucursal = s.id_sucursal
+            `);
+
+        // Si no se encuentran registros, retornar un error 404
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron registros' });
+        }
+
+        // Responder con los datos obtenidos
+        res.status(200).json(result.recordset);
+        
+    } catch (err) {
+        console.error('Error al obtener el reporte de cliente:', err);
+        res.status(500).json({ error: 'Error al obtener el reporte de cliente' });
+    }
+};
+
+
 module.exports = {
     getCliente,
-    addCliente
+    addCliente,
+    getClientes
 }
